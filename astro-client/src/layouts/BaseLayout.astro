@@ -23,7 +23,7 @@ const { header, banner } = data;
   <body class="bg-gray-50">
     { banner && <Banner data={banner} /> }
     <Header data={header} />
-    <main>
+    <main class="container mx-auto">
       <slot />
     </main>
     <Footer />

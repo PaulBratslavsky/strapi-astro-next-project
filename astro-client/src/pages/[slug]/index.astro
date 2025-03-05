@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllPages } from "../../utils/loaders";
+import type { BlockData } from "../../utils/types";
+import BlockRenderer from "../../components/blocks/BlockRenderer.astro";
+
+interface Page {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  blocks: BlockData[];
+}
+
+export async function getStaticPaths() {
+  const pages = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const { data, hasMore: morePages } = await getAllPages(page);
+    pages.push(...data);
+    hasMore = Boolean(morePages);
+    page++;
+  }
+
+  function createStaticPaths(pages: Page[]) {
+    const data = pages.map((page: Page) => ({
+      params: { slug: page.slug },
+      props: page,
+    }));
+
+    return data;
+  }
+
+  return createStaticPaths(pages as Page[]);
+}
+
+type Props = Page;
+const page = Astro.props;
+---
+<BaseLayout>
+  <!-- <h1>{page.title}</h1>
+  <p>{page.description}</p>
+  <pre>{JSON.stringify(page, null, 2)}</pre> -->
+  <BlockRenderer blocks={page?.blocks || []} />
+</BaseLayout>

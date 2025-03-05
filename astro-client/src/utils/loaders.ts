@@ -1,5 +1,44 @@
 import { strapiClient } from "./strapi-client";
 
+const blocksPopulate = {
+  on: {
+    "blocks.hero": {
+      populate: {
+        image: {
+          fields: ["url", "alternativeText"],
+        },
+        links: true,
+      },
+    },
+    "blocks.heading-section": true,
+    "blocks.card-grid": {
+      populate: {
+        card: true,
+      },
+    },
+    "blocks.content-with-image": {
+      populate: {
+        image: {
+          fields: ["url", "alternativeText"],
+        },
+        link: true,
+      },
+    },
+    "blocks.faqs": {
+      populate: {
+        faq: true,
+      },
+    },
+    "blocks.person-card": {
+      populate: {
+        image: {
+          fields: ["url", "alternativeText"],
+        },
+      },
+    },
+  },
+};
+
 async function getCollectionType(name: string, params: object) {
   const data = await strapiClient.collection(name).find(params);
   return data;
@@ -43,47 +82,29 @@ async function getGlobalPageData() {
 async function getLandingPageData() {
   const data = await getSingleType("landing-page", {
     populate: {
-      blocks: {
-        on: {
-          "blocks.hero": {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-              links: true,
-            },
-          },
-          "blocks.heading-section": true,
-          "blocks.card-grid": {
-            populate: {
-              card: true,
-            },
-          },
-          "blocks.content-with-image": {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-              link: true,
-            },
-          },
-          "blocks.faqs": {
-            populate: {
-              faq: true,
-            }
-          },
-          "blocks.person-card": {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-            },
-          },
-        },
-      },
+      blocks: blocksPopulate,
     },
   });
   return data;
 }
 
-export { getGlobalPageData, getLandingPageData };
+async function getAllPages(page: number) {
+  const data = await getCollectionType("pages", {
+    populate: {
+      blocks: blocksPopulate,
+    },
+    pagination: {
+      page,
+      pageSize: 25,
+    },
+  });
+  console.log(data, "THIS IS THE DATA");
+  console.log(data.meta, "THIS IS THE META");
+  if (!data?.data) throw new Error("No data found");
+  const totalPages = data?.meta?.pagination?.pageCount;
+  const currentPage = data?.meta?.pagination?.page;
+  const hasMore = currentPage && totalPages && currentPage < totalPages;
+  return { data: data.data, hasMore };
+}
+
+export { getGlobalPageData, getLandingPageData, getAllPages };
