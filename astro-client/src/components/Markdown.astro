@@ -1,0 +1,43 @@
+---
+// Markdown.astro
+const { content } = Astro.props;
+---
+
+<article class="markdown">
+  {content}
+</article>
+
+<style>
+  .markdown {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  }
+
+  .markdown h1 {
+    font-size: 2rem;
+    color: #333;
+  }
+
+  .markdown h2 {
+    font-size: 1.5rem;
+    color: #444;
+  }
+
+  .markdown p {
+    margin: 0.5rem 0;
+  }
+
+  .markdown a {
+    color: #0070f3;
+    text-decoration: none;
+  }
+
+  .markdown a:hover {
+    text-decoration: underline;
+  }
+
+  /* Add more styles as needed */
+</style>
