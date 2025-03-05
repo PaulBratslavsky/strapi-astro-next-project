@@ -1,0 +1,1 @@
+# strapi-astro-next-project
