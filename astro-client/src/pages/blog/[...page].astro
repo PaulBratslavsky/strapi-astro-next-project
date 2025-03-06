@@ -70,7 +70,10 @@ const totalPages = Math.ceil(page.total / page.size);
             <div class="h-full flex flex-col rounded shadow">
               <StrapiImage
                 class="rounded-t object-cover h-80 lg:h-full w-full"
-                image={articles[0].props.featuredImage}
+                src={articles[0].props.featuredImage.url}
+                alt={articles[0].props.featuredImage.alternativeText}
+                height={800}
+                width={800}
               />
               
               <div class="mt-auto p-6 rounded-b bg-white">
@@ -101,7 +104,12 @@ const totalPages = Math.ceil(page.total / page.size);
                     
                     <StrapiImage
                       class="lg:h-48 rounded-t"
-                      image={article.props.featuredImage}
+                      src={article.props.featuredImage.url}
+                      alt={article.props.featuredImage.alternativeText}
+                      height={400}
+                      width={400}
+
+                    
                     />
                     <div class="p-6 rounded-b bg-white">
                       <span class="text-sm text-gray-400">

@@ -17,7 +17,7 @@ const currentPath = Astro.url.pathname;
 <header class="sticky top-0 z-50">
   <nav class="relative px-6 py-6 flex justify-between items-center bg-white">
     <a class="text-3xl font-bold leading-none" href={logo.logoLink}>
-      <StrapiImage image={logo.image} />
+      <StrapiImage src={logo.image.url} alt={logo.image.alternativeText} height={48} width={48} />
     </a>
     <div class="lg:hidden">
       <button class="navbar-burger flex items-center text-green-600 p-3" id="burger-button">
@@ -70,7 +70,7 @@ const currentPath = Astro.url.pathname;
     >
       <div class="flex items-center mb-8">
         <a class="mr-auto text-3xl font-bold leading-none" href={logo.logoLink}>
-          <StrapiImage image={logo.image} />
+          <StrapiImage class="h-12 w-12" src={logo.image.url} alt={logo.image.alternativeText} height={48} width={48} />
         </a>
         <button class="navbar-close">
           <svg
