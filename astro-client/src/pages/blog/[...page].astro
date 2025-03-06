@@ -40,7 +40,7 @@ export async function getStaticPaths({ paginate }: { paginate: any }) {
 
   const staticPaths = createStaticPaths(articles as Article[]);
 
-  console.log(staticPaths, "static paths");
+  // console.log(staticPaths, "static paths");
 
   const paginatedData = paginate(staticPaths, {
       pageSize: 5,
@@ -66,7 +66,7 @@ const totalPages = Math.ceil(page.total / page.size);
     <div class="container mx-auto px-4">
       <div class="mb-6 flex flex-wrap justify-center">
         <div class="flex flex-wrap -mx-3 mb-16">
-          <div class="mb-6 lg:mb-0 w-full lg:w-1/2 px-3">
+          <a href={`/blog/${articles[0].props.slug}`} class="mb-6 lg:mb-0 w-full lg:w-1/2 px-3">
             <div class="h-full flex flex-col rounded shadow">
               <StrapiImage
                 class="rounded-t object-cover h-80 lg:h-full w-full"
@@ -86,20 +86,19 @@ const totalPages = Math.ceil(page.total / page.size);
                 <p class="mb-6 text-gray-400 leading-loose">
                   {articles[0].props.description}
                 </p>
-                <a
-                  class="text-green-600 hover:text-green-700 font-bold"
-                  href={`/blog/${articles[0].props.slug}`}
+                <span
+                  class="text-green-600 hover:text-green-700 font-bold hover:underline"
                 >
                   Read More
-                </a>
+                </span>
               </div>
             </div>
-          </div>
+          </a>
 
           <div class="flex flex-wrap w-full lg:w-1/2">
             {
               articles.slice(1).map((article: any) => (
-                <div class="mb-6 w-full lg:w-1/2 px-3">
+                <a href={`/blog/${article.props.slug}`} class="mb-6 w-full lg:w-1/2 px-3">
                   <div class="rounded overflow-hidden shadow">
                     
                     <StrapiImage
@@ -118,15 +117,14 @@ const totalPages = Math.ceil(page.total / page.size);
                       <h2 class="my-2 text-2xl font-bold">
                         {article.props.title}
                       </h2>
-                      <a
-                        class="text-green-600 hover:text-green-700 font-bold"
-                        href={`/blog/${article.props.slug}`}
+                      <span
+                        class="text-green-600 hover:text-green-700 font-bold hover:underline"
                       >
                         Read More
-                      </a>
+                      </span>
                     </div>
                   </div>
-                </div>
+                </a>
               ))
             }
           </div>

@@ -25,7 +25,10 @@
         "blocks.card-grid",
         "blocks.content-with-image",
         "blocks.faqs",
-        "blocks.person-card"
+        "blocks.person-card",
+        "blocks.markdown",
+        "blocks.featured-articles",
+        "blocks.newsletter"
       ]
     }
   }

@@ -34,6 +34,16 @@ export interface BlocksFaqs extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksFeaturedArticles extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_featured_articles';
+  info: {
+    displayName: 'Featured Articles';
+  };
+  attributes: {
+    articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
+  };
+}
+
 export interface BlocksHeadingSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_heading_sections';
   info: {
@@ -57,6 +67,30 @@ export interface BlocksHero extends Struct.ComponentSchema {
     image: Schema.Attribute.Media<'images'>;
     links: Schema.Attribute.Component<'shared.link', true>;
     text: Schema.Attribute.RichText;
+  };
+}
+
+export interface BlocksMarkdown extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_markdowns';
+  info: {
+    displayName: 'Markdown';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+  };
+}
+
+export interface BlocksNewsletter extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_newsletters';
+  info: {
+    displayName: 'Newsletter';
+  };
+  attributes: {
+    formId: Schema.Attribute.String;
+    heading: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+    placeholder: Schema.Attribute.String;
+    text: Schema.Attribute.Text;
   };
 }
 
@@ -144,8 +178,11 @@ declare module '@strapi/strapi' {
       'blocks.card-grid': BlocksCardGrid;
       'blocks.content-with-image': BlocksContentWithImage;
       'blocks.faqs': BlocksFaqs;
+      'blocks.featured-articles': BlocksFeaturedArticles;
       'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
+      'blocks.markdown': BlocksMarkdown;
+      'blocks.newsletter': BlocksNewsletter;
       'blocks.person-card': BlocksPersonCard;
       'layout.banner': LayoutBanner;
       'layout.header': LayoutHeader;

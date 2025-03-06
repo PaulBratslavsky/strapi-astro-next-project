@@ -1,7 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import CardsStack from "../components/CardsStack.astro";
-import Signup from "../components/Signup.astro";
 import BlockRenderer from "../components/blocks/BlockRenderer.astro";
 import { getLandingPageData } from "../utils/loaders";
 
@@ -12,7 +10,5 @@ if (!landingPage) throw new Error("Landing page not found");
 
 <BaseLayout>
   <BlockRenderer blocks={landingPage.blocks} />
-  <CardsStack />
-  <Signup />
 </BaseLayout>
 

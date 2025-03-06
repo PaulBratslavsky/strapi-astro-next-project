@@ -32,13 +32,16 @@ export type ComponentType =
   | "blocks.card-grid"
   | "blocks.content-with-image"
   | "blocks.faqs"
-  | "blocks.person-card";
+  | "blocks.person-card"
+  | "blocks.markdown"
+  | "blocks.featured-articles"
+  | "blocks.newsletter";
 
 export interface Base<
   T extends ComponentType,
   D extends object = Record<string, unknown>
 > {
-  id: number;
+  id?: number;
   __component: T;
   documentId?: string;
   createdAt?: string;
@@ -91,10 +94,45 @@ export interface PersonCardProps extends Base<"blocks.person-card"> {
   text: string;
 }
 
+export interface MarkdownProps extends Base<"blocks.markdown"> {
+  content: string;
+}
+
+export interface FeaturedArticlesProps extends Base<"blocks.featured-articles"> {
+  articles: {
+    id: number;
+    documentId: string;
+    title: string;
+    description: string;
+    link: Link;
+    publishedAt: string;
+    updatedAt: string;
+    slug: string;
+    author: {
+      id: number;
+      documentId: string;
+      fullName: string;
+      image: Image;
+    };
+    featuredImage: Image;
+  }[];
+}
+
+export interface NewsletterProps extends Base<"blocks.newsletter"> {
+  heading: string;
+  text: string;
+  placeholder: string;
+  label: string;
+  formId: string;
+}
+
 export type BlockData =
   | HeroProps
   | HeadingSectionProps
   | CardGridProps
   | ContentWithImageProps
   | FaqsProps
-  | PersonCardProps;
+  | PersonCardProps
+  | MarkdownProps
+  | FeaturedArticlesProps
+  | NewsletterProps;

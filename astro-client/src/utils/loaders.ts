@@ -36,6 +36,26 @@ const blocksPopulate = {
         },
       },
     },
+    "blocks.markdown": true,
+    "blocks.featured-articles": {
+      populate: {
+        articles: {
+          populate: {
+            featuredImage: {
+              fields: ["url", "alternativeText"],
+            },
+            author: {
+              populate: {
+                image: {
+                  fields: ["url", "alternativeText"],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "blocks.newsletter": true,
   },
 };
 
@@ -111,6 +131,15 @@ async function getAllArticles(page: number) {
       featuredImage: {
         fields: ["url", "alternativeText"],
       },
+      author: {
+        populate: {
+          image: {
+            fields: ["url", "alternativeText"],
+          },
+        },
+      },
+      tags: true,
+      blocks: blocksPopulate,
     },
     pagination: {
       page,

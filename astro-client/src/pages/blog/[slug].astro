@@ -1,0 +1,136 @@
+---
+import type { Image, BlockData } from "../../utils/types";
+import { getAllArticles } from "../../utils/loaders";
+import StrapiImage from "../../components/StrapiImage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Markdown from "../../components/blocks/Markdown.astro";
+import BlockRenderer from "../../components/blocks/BlockRenderer.astro";
+
+interface Article {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  content: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  featuredImage: Image;
+  author: {
+    id: number;
+    documentId: string;
+    fullName: string;
+    bio: string;
+    image: Image;
+  };
+  tags: {
+    id: number;
+    documentId: string;
+    title: string;
+  }[];
+  blocks: BlockData[];
+}
+
+export async function getStaticPaths() {
+  const articles = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const { data, hasMore: morePages } = await getAllArticles(page);
+    articles.push(...data);
+    hasMore = Boolean(morePages);
+    page++;
+  }
+
+  function createStaticPaths(articles: Article[]) {
+    const data = articles.map((article: Article) => ({
+      params: { slug: article.slug },
+      props: article,
+    }));
+
+    return data;
+  }
+
+  return createStaticPaths(articles as Article[]);
+}
+
+type Props = Article;
+const post = Astro.props;
+
+const blocks = post?.blocks || [];
+const featuredImage = post?.featuredImage || {};
+const author = post?.author || {};
+const tags = post?.tags || [];
+---
+
+<BaseLayout>
+  <section class="my-6">
+    <div class="container mx-auto">
+      <div>
+        {
+          featuredImage && (
+            <StrapiImage
+              class="w-full h-80 object-cover rounded-lg"
+              src={featuredImage.url}
+              alt={featuredImage.alternativeText}
+              height={600}
+              width={800}
+            />
+          )
+        }
+      </div>
+      <div class="py-14 max-w-2xl mx-auto text-center">
+        {
+          tags.length > 0 && tags.map((tag) => (
+            <span class="uppercase text-base lg:text-xl text-green-600 hover:text-green-700 hover:underline">
+              {tag.title}
+            </span>
+          ))
+        }
+
+        <span
+          class="uppercase text-base lg:text-xl text-green-600 hover:text-green-700 hover:underline"
+        >
+        </span>
+        <div class="mt-2">
+          <h2 class="mb-6 text-4xl lg:text-5xl font-bold font-heading">
+            {post.title}
+          </h2>
+          {
+            author?.image && (
+              <div class="flex justify-center">
+                <div class="mr-4">
+ 
+              <StrapiImage
+                src={author.image.url}
+                alt={author.image.alternativeText}
+                height={100}
+                width={100}
+                class="w-12 h-12 object-cover object-top rounded-3xl"
+
+              />
+            </div>
+            <div class="text-left">
+              <span>
+                <h3
+                  class="text-gray-500 hover:text-gray-600 hover:underline font-bold"
+                >
+                  {author.fullName}
+                </h3>
+              </span>
+              <span>
+                <span class="text-xs text-green-600 font-bold">Author</span>
+              </span>
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+      { post?.content && <Markdown data={{ content: post.content, __component: "blocks.markdown" }} />} 
+    </div>
+  </section>
+  <BlockRenderer blocks={blocks} />
+</BaseLayout>
