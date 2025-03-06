@@ -1,0 +1,137 @@
+---
+import type { Image } from "../../utils/types";
+import { getAllArticles } from "../../utils/loaders";
+import { formatDate } from "../../utils/index";
+import StrapiImage from "../../components/StrapiImage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Pagination from "../../components/Pagination.astro";
+
+interface Article {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  featuredImage: Image;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: any }) {
+  const articles = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const { data, hasMore: morePages } = await getAllArticles(page);
+    articles.push(...data);
+    hasMore = Boolean(morePages);
+    page++;
+  }
+
+  function createStaticPaths(articles: Article[]) {
+    const data = articles.map((article: Article) => ({
+      params: { slug: article.slug },
+      props: article,
+    }));    
+    return data;
+  }
+
+  const staticPaths = createStaticPaths(articles as Article[]);
+
+  console.log(staticPaths, "static paths");
+
+  const paginatedData = paginate(staticPaths, {
+      pageSize: 5,
+      url: {
+        prev: "/blog",
+        next: "/blog",
+      },
+    });
+
+
+  return paginatedData;
+}
+
+const { page }: any = Astro.props;
+const articles = page.data;
+
+const currentPage = page.currentPage;
+const totalPages = Math.ceil(page.total / page.size);
+---
+
+<BaseLayout>
+  <section class="py-8 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="mb-6 flex flex-wrap justify-center">
+        <div class="flex flex-wrap -mx-3 mb-16">
+          <div class="mb-6 lg:mb-0 w-full lg:w-1/2 px-3">
+            <div class="h-full flex flex-col rounded shadow">
+              <StrapiImage
+                class="rounded-t object-cover h-80 lg:h-full w-full"
+                image={articles[0].props.featuredImage}
+              />
+              
+              <div class="mt-auto p-6 rounded-b bg-white">
+                <span class="text-sm text-gray-400">
+                  {formatDate(articles[0].props.publishedAt)}
+                </span>
+                <h2 class="my-2 text-2xl font-bold">
+                  {articles[0].props.title}
+                </h2>
+                <p class="mb-6 text-gray-400 leading-loose">
+                  {articles[0].props.description}
+                </p>
+                <a
+                  class="text-green-600 hover:text-green-700 font-bold"
+                  href={`/blog/${articles[0].props.slug}`}
+                >
+                  Read More
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap w-full lg:w-1/2">
+            {
+              articles.slice(1).map((article: any) => (
+                <div class="mb-6 w-full lg:w-1/2 px-3">
+                  <div class="rounded overflow-hidden shadow">
+                    
+                    <StrapiImage
+                      class="lg:h-48 rounded-t"
+                      image={article.props.featuredImage}
+                    />
+                    <div class="p-6 rounded-b bg-white">
+                      <span class="text-sm text-gray-400">
+                        {formatDate(article.props.publishedAt)}
+                      </span>
+                      <h2 class="my-2 text-2xl font-bold">
+                        {article.props.title}
+                      </h2>
+                      <a
+                        class="text-green-600 hover:text-green-700 font-bold"
+                        href={`/blog/${article.props.slug}`}
+                      >
+                        Read More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+        <Pagination
+          previousPage={page.url.prev ? page.url.prev : null}
+          nextPage={page.url.next ? page.url.next : null}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
+      </div>
+    </div>
+  </section>
+  <pre>{JSON.stringify(page, null, 2)}</pre>
+
+</BaseLayout>

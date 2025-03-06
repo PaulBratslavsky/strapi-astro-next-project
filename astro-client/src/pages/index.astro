@@ -8,8 +8,6 @@ import { getLandingPageData } from "../utils/loaders";
 const data = await getLandingPageData();
 const landingPage = data?.data;
 if (!landingPage) throw new Error("Landing page not found");
-
-console.dir(landingPage, { depth: null });
 ---
 
 <BaseLayout>

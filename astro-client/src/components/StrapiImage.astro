@@ -22,7 +22,4 @@ function getStrapiMedia(url: string | null) {
 
 const imageUrl = getStrapiMedia(image.url);
 ---
-
-<div>
-  <img src={imageUrl} alt={image.alternativeText} class={className} />
-</div>
+<img src={imageUrl} alt={image.alternativeText} class={className} />
