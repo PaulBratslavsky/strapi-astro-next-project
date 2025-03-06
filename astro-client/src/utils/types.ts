@@ -26,6 +26,13 @@ export interface GlobalPageHeader {
   cta: Link;
 }
 
+export interface GlobalPageFooter {
+  logo: Logo;
+  navItems: Link[];
+  socialLinks: Logo[];
+  text: string;
+}
+
 export type ComponentType =
   | "blocks.hero"
   | "blocks.heading-section"

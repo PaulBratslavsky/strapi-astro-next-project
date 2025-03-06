@@ -92,6 +92,25 @@ async function getGlobalPageData() {
           cta: true,
         },
       },
+      footer: {
+        populate: {
+          logo: {
+            populate: {
+              image: {
+                fields: ["url", "alternativeText"],
+              },
+            },
+          },
+          navItems: true,
+          socialLinks: {
+            populate: {
+              image: {
+                fields: ["url", "alternativeText"],
+              },
+            },
+          },
+        },
+      }
     },
   });
   const globalData = data?.data;
